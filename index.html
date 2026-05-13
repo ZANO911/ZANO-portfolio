@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZANO911 Portfolio</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #000;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 100px 20px;
+    }
+
+    .hero p.top {
+      color: #777;
+      letter-spacing: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+
+    .hero h1 {
+      font-size: 70px;
+      font-weight: 900;
+      margin-bottom: 25px;
+      background: linear-gradient(to right, white, #999);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero .desc {
+      color: #aaa;
+      max-width: 750px;
+      margin: auto;
+      line-height: 1.8;
+      font-size: 18px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-top: 60px;
+    }
+
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 25px;
+      padding: 35px;
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: #555;
+    }
+
+    .card h2 {
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+
+    .card p {
+      color: #999;
+      line-height: 1.8;
+    }
+
+    .projects {
+      margin-top: 120px;
+    }
+
+    .projects h2 {
+      font-size: 45px;
+      margin-bottom: 40px;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+
+    .project {
+      background: linear-gradient(145deg, #111, #000);
+      border: 1px solid #222;
+      border-radius: 30px;
+      padding: 35px;
+      transition: 0.3s ease;
+    }
+
+    .project:hover {
+      border-color: #666;
+    }
+
+    .project small {
+      color: #666;
+      display: block;
+      margin-bottom: 15px;
+    }
+
+    .project h3 {
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    .project p {
+      color: #999;
+      line-height: 1.8;
+    }
+
+    .contact {
+      margin-top: 120px;
+      text-align: center;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 35px;
+      padding: 60px 20px;
+    }
+
+    .contact h2 {
+      font-size: 50px;
+      margin-bottom: 30px;
+    }
+
+    .contact p {
+      color: #bbb;
+      margin: 12px 0;
+      font-size: 20px;
+    }
+
+    footer {
+      text-align: center;
+      color: #555;
+      padding: 50px 20px 20px;
+      font-size: 14px;
+    }
+
+    @media(max-width: 768px) {
+      .hero h1 {
+        font-size: 42px;
+      }
+
+      .contact h2 {
+        font-size: 34px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <section class="hero">
+      <p class="top">_ZANO911_</p>
+
+      <h1>Minecraft & Discord Developer</h1>
+
+      <p class="desc">
+        Professional developer specialized in Minecraft servers,
+        Discord systems, automation, protections, custom setups,
+        and community infrastructure.
+      </p>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <h2>Minecraft Development</h2>
+        <p>
+          Server setup, optimization, plugins, configs,
+          permissions, and advanced systems.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Discord Systems</h2>
+        <p>
+          Bots, tickets, moderation, logging,
+          verification, and automation systems.
+        </p>
+      </div>
+
+      <div class="card">
+        <h2>Server Protection</h2>
+        <p>
+          Security improvements, anti-abuse systems,
+          backups, and management tools.
+        </p>
+      </div>
+    </section>
+
+    <section class="projects">
+      <h2>Projects</h2>
+
+      <div class="project-grid">
+        <div class="project">
+          <small>PROJECT 01</small>
+          <h3>Custom Minecraft Server</h3>
+          <p>
+            Professional infrastructure with clean configuration
+            and scalable systems.
+          </p>
+        </div>
+
+        <div class="project">
+          <small>PROJECT 02</small>
+          <h3>Advanced Discord Bot</h3>
+          <p>
+            Advanced moderation and automation systems
+            with high performance.
+          </p>
+        </div>
+
+        <div class="project">
+          <small>PROJECT 03</small>
+          <h3>Ticket & Store System</h3>
+          <p>
+            Smooth management systems for communities,
+            stores, and support.
+          </p>
+        </div>
+
+        <div class="project">
+          <small>PROJECT 04</small>
+          <h3>Moderation Dashboard</h3>
+          <p>
+            Powerful dashboard and organized management tools
+            for servers.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact">
+      <h2>Let’s Build Something Powerful.</h2>
+
+      <p>Discord: _zano911_</p>
+      <p>TikTok: @_zahraa911_</p>
+    </section>
+
+    <footer>
+      © 2026 _ZANO911_ — All Rights Reserved.
+    </footer>
+
+  </div>
+</body>
+</html>
