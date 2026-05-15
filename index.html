@@ -2,264 +2,558 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZANO911 Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>ZANO911 | Minecraft & Discord Developer</title>
+
+  <!-- Font Awesome 6 (free icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+    }
+
+    /* CSS Variables for Light/Dark Mode - default dark */
+    :root {
+      --bg-primary: #000000;
+      --bg-secondary: #0a0a0f;
+      --bg-card: rgba(15, 15, 20, 0.7);
+      --bg-card-solid: #0e0e14;
+      --text-primary: #f0f0f0;
+      --text-secondary: #bcbcbc;
+      --text-muted: #888;
+      --border-color: rgba(255,255,255,0.08);
+      --border-hover: rgba(255,255,255,0.25);
+      --glass-bg: rgba(15, 15, 20, 0.7);
+      --gradient-light: #FFFFFF, #B0B0B0;
+      --shadow-sm: 0 15px 35px rgba(0,0,0,0.3);
+      --btn-bg: #0e0e12;
+      --btn-hover: #1c1c24;
+    }
+
+    body.light-mode {
+      --bg-primary: #f5f7fc;
+      --bg-secondary: #ffffff;
+      --bg-card: rgba(245, 247, 252, 0.85);
+      --bg-card-solid: #ffffff;
+      --text-primary: #111827;
+      --text-secondary: #374151;
+      --text-muted: #6b7280;
+      --border-color: rgba(0, 0, 0, 0.08);
+      --border-hover: rgba(0, 0, 0, 0.2);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --gradient-light: #1f2937, #4b5563;
+      --shadow-sm: 0 15px 35px rgba(0,0,0,0.08);
+      --btn-bg: #e5e7eb;
+      --btn-hover: #d1d5db;
     }
 
     body {
-      background: #000;
-      color: white;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
+      scroll-behavior: smooth;
+      transition: background-color 0.3s ease, color 0.2s ease;
+    }
+
+    /* animated gradient background that adapts */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 10% 20%, rgba(100,100,140,0.2), var(--bg-primary) 90%);
+      z-index: -2;
+      transition: background 0.3s ease;
     }
 
     .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 40px 20px;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 30px 24px 60px;
+      position: relative;
+    }
+
+    /* ===== animations ===== */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(35px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes glowPulse {
+      0% { text-shadow: 0 0 0px rgba(255,255,255,0.2);}
+      100% { text-shadow: 0 0 12px rgba(255,255,255,0.5);}
+    }
+    body.light-mode .hero h1 {
+      animation: none;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .hero, .cards, .projects, .contact {
+      animation: fadeUp 0.8s ease forwards;
+      opacity: 0;
+    }
+    .hero { animation-delay: 0.1s; }
+    .cards { animation-delay: 0.25s; }
+    .projects { animation-delay: 0.4s; }
+    .contact { animation-delay: 0.55s; }
+    footer { animation: fadeUp 0.6s ease forwards; animation-delay: 0.7s; opacity: 0; animation-fill-mode: forwards; }
+
+    /* top bar + theme toggle */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-muted));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .right-controls {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+    /* 🌙☀️ animated toggle button */
+    .theme-toggle {
+      background: var(--bg-card);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-color);
+      border-radius: 60px;
+      width: 64px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      cursor: pointer;
+      position: relative;
+      transition: 0.2s;
+      box-shadow: var(--shadow-sm);
+    }
+    .theme-toggle i {
+      font-size: 18px;
+      z-index: 2;
+      transition: 0.2s;
+      color: var(--text-secondary);
+    }
+    .toggle-slider {
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      background: var(--text-primary);
+      border-radius: 50%;
+      left: 4px;
+      top: 3px;
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    body.light-mode .toggle-slider {
+      transform: translateX(28px);
+      background: #fbbf24;
+    }
+    .theme-toggle:hover {
+      border-color: var(--border-hover);
+    }
+
+    .social-icon {
+      color: var(--text-secondary);
+      font-size: 26px;
+      transition: 0.25s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background: var(--bg-card);
+      padding: 8px 16px;
+      border-radius: 60px;
+      backdrop-filter: blur(4px);
+      font-weight: 500;
+      font-size: 16px;
+      border: 1px solid var(--border-color);
+    }
+    .social-icon:hover {
+      color: var(--text-primary);
+      background: var(--btn-hover);
+      transform: translateY(-3px);
     }
 
     .hero {
       text-align: center;
-      padding: 100px 20px;
+      padding: 60px 20px 40px;
     }
-
     .hero p.top {
-      color: #777;
-      letter-spacing: 8px;
+      color: var(--text-muted);
+      letter-spacing: 6px;
       margin-bottom: 20px;
       font-size: 14px;
+      background: var(--bg-card);
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 40px;
+      backdrop-filter: blur(4px);
     }
-
     .hero h1 {
-      font-size: 70px;
-      font-weight: 900;
+      font-size: 74px;
+      font-weight: 800;
       margin-bottom: 25px;
-      background: linear-gradient(to right, white, #999);
+      background: linear-gradient(135deg, var(--text-primary), var(--text-muted));
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1px;
+      transition: 0.2s;
     }
-
+    body.light-mode .hero h1 {
+      background: linear-gradient(135deg, #111827, #4b5563);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
     .hero .desc {
-      color: #aaa;
-      max-width: 750px;
+      color: var(--text-secondary);
+      max-width: 780px;
       margin: auto;
-      line-height: 1.8;
-      font-size: 18px;
+      line-height: 1.7;
+      font-size: 19px;
     }
 
+    /* cards */
     .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 25px;
-      margin-top: 60px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 30px;
+      margin-top: 70px;
     }
-
     .card {
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 25px;
-      padding: 35px;
-      transition: 0.3s ease;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 40px;
+      padding: 38px 28px;
+      transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+      box-shadow: var(--shadow-sm);
     }
-
     .card:hover {
-      transform: translateY(-8px);
-      border-color: #555;
+      transform: translateY(-12px) scale(1.01);
+      border-color: var(--border-hover);
+      background: var(--glass-bg);
     }
-
-    .card h2 {
-      margin-bottom: 15px;
-      font-size: 28px;
+    .card i {
+      font-size: 48px;
+      margin-bottom: 25px;
+      background: linear-gradient(145deg, var(--text-primary), var(--text-muted));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
+    .card h2 { font-size: 28px; margin-bottom: 16px; }
+    .card p { color: var(--text-secondary); line-height: 1.6; }
 
-    .card p {
-      color: #999;
-      line-height: 1.8;
-    }
-
+    /* projects */
     .projects {
-      margin-top: 120px;
+      margin-top: 130px;
     }
-
     .projects h2 {
-      font-size: 45px;
-      margin-bottom: 40px;
+      font-size: 52px;
+      margin-bottom: 20px;
+      font-weight: 700;
+      position: relative;
+      display: inline-block;
     }
-
+    .projects h2:after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 70px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--text-primary), var(--text-muted), transparent);
+      border-radius: 4px;
+    }
     .project-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 30px;
+      gap: 35px;
+      margin-top: 50px;
     }
-
     .project {
-      background: linear-gradient(145deg, #111, #000);
-      border: 1px solid #222;
-      border-radius: 30px;
-      padding: 35px;
-      transition: 0.3s ease;
+      background: var(--bg-card-solid);
+      border: 1px solid var(--border-color);
+      border-radius: 36px;
+      padding: 38px 30px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
     }
-
     .project:hover {
-      border-color: #666;
+      transform: translateY(-8px);
+      border-color: var(--border-hover);
+      box-shadow: var(--shadow-sm);
     }
-
     .project small {
-      color: #666;
-      display: block;
-      margin-bottom: 15px;
+      color: var(--text-muted);
+      font-size: 14px;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
     }
+    .project h3 { font-size: 32px; margin-bottom: 18px; }
+    .project p { color: var(--text-secondary); line-height: 1.65; }
 
-    .project h3 {
-      font-size: 30px;
-      margin-bottom: 15px;
-    }
-
-    .project p {
-      color: #999;
-      line-height: 1.8;
-    }
-
+    /* contact */
     .contact {
-      margin-top: 120px;
+      margin-top: 130px;
       text-align: center;
-      background: #111;
-      border: 1px solid #222;
-      border-radius: 35px;
-      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 65px;
+      padding: 70px 30px;
+      backdrop-filter: blur(4px);
     }
-
     .contact h2 {
-      font-size: 50px;
-      margin-bottom: 30px;
+      font-size: 54px;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, var(--text-primary), var(--text-muted));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
-
-    .contact p {
-      color: #bbb;
-      margin: 12px 0;
-      font-size: 20px;
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 35px;
+      margin: 35px 0 20px;
     }
-
+    .contact-link {
+      background: var(--btn-bg);
+      padding: 16px 38px;
+      border-radius: 70px;
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 22px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      transition: all 0.25s ease;
+    }
+    .contact-link:hover {
+      transform: scale(1.05);
+      background: var(--btn-hover);
+      border-color: #6a6aff;
+    }
     footer {
       text-align: center;
-      color: #555;
-      padding: 50px 20px 20px;
+      color: var(--text-muted);
+      padding: 60px 20px 20px;
       font-size: 14px;
+      border-top: 1px solid var(--border-color);
+      margin-top: 40px;
     }
-
-    @media(max-width: 768px) {
-      .hero h1 {
-        font-size: 42px;
-      }
-
-      .contact h2 {
-        font-size: 34px;
-      }
+    .scroll-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: var(--bg-card);
+      padding: 12px 16px;
+      border-radius: 50px;
+      color: var(--text-primary);
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0;
+      transition: 0.3s;
+      border: 1px solid var(--border-color);
+      pointer-events: none;
+    }
+    .scroll-top.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    @media (max-width: 780px) {
+      .hero h1 { font-size: 44px; }
+      .contact h2 { font-size: 36px; }
+      .contact-link { font-size: 18px; padding: 12px 24px; }
     }
   </style>
 </head>
-
 <body>
-  <div class="container">
-
-    <section class="hero">
-      <p class="top">_ZANO911_</p>
-
-      <h1>Minecraft & Discord Developer</h1>
-
-      <p class="desc">
-        Professional developer specialized in Minecraft servers,
-        Discord systems, automation, protections, custom setups,
-        and community infrastructure.
-      </p>
-    </section>
-
-    <section class="cards">
-      <div class="card">
-        <h2>Minecraft Development</h2>
-        <p>
-          Server setup, optimization, plugins, configs,
-          permissions, and advanced systems.
-        </p>
+<div class="container">
+  <div class="top-bar">
+    <div class="logo"><i class="fas fa-cube" style="margin-right: 8px;"></i> ZANO911</div>
+    <div class="right-controls">
+      <!-- animated sun/moon toggle button -->
+      <div class="theme-toggle" id="themeToggle">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+        <div class="toggle-slider"></div>
       </div>
-
-      <div class="card">
-        <h2>Discord Systems</h2>
-        <p>
-          Bots, tickets, moderation, logging,
-          verification, and automation systems.
-        </p>
-      </div>
-
-      <div class="card">
-        <h2>Server Protection</h2>
-        <p>
-          Security improvements, anti-abuse systems,
-          backups, and management tools.
-        </p>
-      </div>
-    </section>
-
-    <section class="projects">
-      <h2>Projects</h2>
-
-      <div class="project-grid">
-        <div class="project">
-          <small>PROJECT 01</small>
-          <h3>Custom Minecraft Server</h3>
-          <p>
-            Professional infrastructure with clean configuration
-            and scalable systems.
-          </p>
-        </div>
-
-        <div class="project">
-          <small>PROJECT 02</small>
-          <h3>Advanced Discord Bot</h3>
-          <p>
-            Advanced moderation and automation systems
-            with high performance.
-          </p>
-        </div>
-
-        <div class="project">
-          <small>PROJECT 03</small>
-          <h3>Ticket & Store System</h3>
-          <p>
-            Smooth management systems for communities,
-            stores, and support.
-          </p>
-        </div>
-
-        <div class="project">
-          <small>PROJECT 04</small>
-          <h3>Moderation Dashboard</h3>
-          <p>
-            Powerful dashboard and organized management tools
-            for servers.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="contact">
-      <h2>Let’s Build Something Powerful.</h2>
-
-      <p>Discord: _zano911_</p>
-      <p>TikTok: @_zahraa911_</p>
-    </section>
-
-    <footer>
-      © 2026 _ZANO911_ — All Rights Reserved.
-    </footer>
-
+      <a href="#" id="discordQuick" class="social-icon"><i class="fab fa-discord"></i> <span>Discord</span></a>
+      <a href="https://www.tiktok.com/@_zahraa911_" target="_blank" class="social-icon"><i class="fab fa-tiktok"></i> <span>TikTok</span></a>
+    </div>
   </div>
+
+  <section class="hero">
+    <p class="top"><i class="fas fa-terminal"></i> _ZANO911_ // FULL-STACK</p>
+    <h1>Minecraft & Discord Developer</h1>
+    <p class="desc">
+      Professional developer specialized in Minecraft servers,<br>
+      Discord ecosystems, automation, advanced protections, custom setups,<br>
+      and scalable community infrastructure.
+    </p>
+  </section>
+
+  <section class="cards">
+    <div class="card">
+      <i class="fas fa-cubes"></i>
+      <h2>Minecraft Development</h2>
+      <p>Server setup, performance optimization, custom plugins, permissions, world management, and advanced systems.</p>
+    </div>
+    <div class="card">
+      <i class="fab fa-discord"></i>
+      <h2>Discord Systems</h2>
+      <p>Powerful bots, ticket tools, auto-moderation, logging, verification, and full automation workflows.</p>
+    </div>
+    <div class="card">
+      <i class="fas fa-shield-alt"></i>
+      <h2>Server Protection</h2>
+      <p>Anti-DDoS strategies, anti-cheat configurations, secure backups, anti-abuse &amp; management dashboards.</p>
+    </div>
+  </section>
+
+  <section class="projects">
+    <h2><i class="fas fa-rocket" style="margin-right: 12px;"></i> Recent projects</h2>
+    <div class="project-grid">
+      <div class="project"><small><i class="fas fa-server"></i> PROJECT 01</small><h3>InfinityMC Network</h3><p>Custom Minecraft server infrastructure with clean configuration, load balancing, and scalability for 500+ players.</p></div>
+      <div class="project"><small><i class="fas fa-robot"></i> PROJECT 02</small><h3>Aegis Discord Bot</h3><p>High-performance moderation & automation, customizable logging, voice stats, and real-time alerts.</p></div>
+      <div class="project"><small><i class="fas fa-ticket-alt"></i> PROJECT 03</small><h3>TicketFlow System</h3><p>Smooth ticket management + store integration, automated transcripts, and advanced role-based support.</p></div>
+      <div class="project"><small><i class="fas fa-chart-line"></i> PROJECT 04</small><h3>Moderation Dashboard</h3><p>Interactive web dashboard for staff, live punishments, player insights, and analytics tools.</p></div>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Let’s Build Something Powerful.</h2>
+    <div class="contact-buttons">
+      <!-- Discord link using the specific user ID: 1496865181811212380 -->
+      <a href="https://discord.com/users/1496865181811212380" target="_blank" class="contact-link" id="mainDiscordBtn">
+        <i class="fab fa-discord"></i> _zano911_
+      </a>
+      <a href="https://www.tiktok.com/@_zahraa911_" target="_blank" class="contact-link">
+        <i class="fab fa-tiktok"></i> @_zahraa911_
+      </a>
+    </div>
+    <p style="margin-top: 32px; font-size: 17px; opacity: 0.8;"><i class="fas fa-globe"></i> Direct message me on Discord or TikTok — ready for commissions & collaborations</p>
+  </section>
+
+  <footer>
+    <i class="far fa-copyright"></i> 2026 _ZANO911_ — All Rights Reserved. ✦ high-performance systems ✦
+  </footer>
+</div>
+<div class="scroll-top" id="scrollTopBtn"><i class="fas fa-arrow-up"></i></div>
+
+<script>
+  (function() {
+    // THEME TOGGLE (Light/Dark Mode with sun/moon animation)
+    const themeToggle = document.getElementById('themeToggle');
+    const body = document.body;
+    
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+      body.classList.add('light-mode');
+    } else if (savedTheme === 'dark') {
+      body.classList.remove('light-mode');
+    } else {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      }
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+    
+    // Discord Profile Link using the provided ID: 1496865181811212380
+    const DISCORD_PROFILE_URL = "https://discord.com/users/1496865181811212380";
+    const discordQuickBtn = document.getElementById("discordQuick");
+    const mainDiscordBtn = document.getElementById("mainDiscordBtn");
+    
+    function openDiscordProfile() {
+      window.open(DISCORD_PROFILE_URL, "_blank");
+    }
+    if (discordQuickBtn) discordQuickBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openDiscordProfile();
+    });
+    if (mainDiscordBtn) mainDiscordBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openDiscordProfile();
+    });
+    
+    // Scroll to top button
+    const scrollBtn = document.getElementById("scrollTopBtn");
+    window.addEventListener("scroll", () => {
+      if(window.scrollY > 400) scrollBtn.classList.add("show");
+      else scrollBtn.classList.remove("show");
+    });
+    scrollBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+    
+    // 3D tilt effect on cards (light mode friendly)
+    const cards = document.querySelectorAll(".card");
+    cards.forEach(card => {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const xPercent = (x / rect.width - 0.5) * 6;
+        const yPercent = (y / rect.height - 0.5) * 6;
+        card.style.transform = `translateY(-8px) perspective(800px) rotateX(${yPercent * 0.3}deg) rotateY(${xPercent * 0.3}deg)`;
+      });
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "translateY(0px) rotateX(0deg) rotateY(0deg)";
+      });
+    });
+    
+    // update footer year
+    const footer = document.querySelector("footer");
+    const currentYear = new Date().getFullYear();
+    if(footer) {
+      footer.innerHTML = `<i class="far fa-copyright"></i> ${currentYear} _ZANO911_ — All Rights Reserved. ✦ high-performance systems ✦`;
+    }
+    
+    // subtle contact glow pulse for both themes
+    const contactSection = document.querySelector(".contact");
+    if(contactSection) {
+      setInterval(() => {
+        contactSection.style.transition = "box-shadow 0.4s";
+        contactSection.style.boxShadow = "0 0 14px rgba(100,100,200,0.2)";
+        setTimeout(() => { contactSection.style.boxShadow = "none"; }, 700);
+      }, 4500);
+    }
+  })();
+</script>
 </body>
 </html>
